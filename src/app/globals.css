@@ -1,8 +1,152 @@
 @import "tailwindcss";
 
+/* Windows 95 Theme Override */
+* {
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+}
+
+/* Color Scheme - Classic Win95 */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-scheme-1--text: #000000;
+  --color-scheme-1--background: #C0C0C0;
+  --color-scheme-1--foreground: #FFFFFF;
+  --color-scheme-1--border: #868A8E;
+  --color-scheme-1--accent: #000080;
+  
+  /* Win95-specific colors */
+  --win95-gray: #C0C0C0;
+  --win95-dark-border: #404040;
+  --win95-blue: #000080;
+  --win95-highlight: #FFFFFF;
+}
+
+body {
+  background: var(--win95-gray) !important;
+  color: black !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Classic 3D Borders */
+button, input, select, textarea, 
+.win95-element, .win95-card, .win95-button {
+  border-style: solid !important;
+  border-width: 2px !important;
+  border-color: var(--win95-highlight) var(--win95-dark-border) var(--win95-dark-border) var(--win95-highlight) !important;
+  background: var(--win95-gray) !important;
+  border-radius: 0 !important;
+}
+
+/* Pressed/Active State */
+button:active, .win95-button:active, 
+input:checked, .win95-element.active {
+  border-color: var(--win95-dark-border) var(--win95-highlight) var(--win95-highlight) var(--win95-dark-border) !important;
+}
+
+/* Buttons */
+button, .win95-button {
+  background: var(--win95-gray) !important;
+  color: black !important;
+  padding: 3px 12px !important;
+  border-radius: 0 !important;
+  min-height: 24px;
+  text-shadow: none !important;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.win95-button-white {
+  background: white !important;
+  color: black !important;
+}
+
+/* Form Elements */
+input, select, textarea {
+  background: white !important;
+  padding: 3px 4px !important;
+  border-width: 2px !important;
+  border-color: var(--win95-dark-border) var(--win95-highlight) var(--win95-highlight) var(--win95-dark-border) !important;
+}
+
+/* Checkboxes & Radios */
+input[type="checkbox"], input[type="radio"] {
+  width: 13px !important;
+  height: 13px !important;
+  border-radius: 0 !important;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+}
+
+input[type="radio"] {
+  border-radius: 50% !important;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✓";
+  color: black;
+  font-size: 12px;
+  position: absolute;
+  left: 1px;
+  top: -2px;
+}
+
+/* Window Chrome */
+.win95-window {
+  background: var(--win95-gray) !important;
+  padding: 3px !important;
+  border-width: 3px !important;
+  border-color: var(--win95-highlight) var(--win95-dark-border) var(--win95-dark-border) var(--win95-highlight) !important;
+}
+
+/* Title Bars */
+.win95-title-bar {
+  background: var(--win95-blue) !important;
+  color: white !important;
+  padding: 2px 4px !important;
+  margin: 0 0 4px 0 !important;
+  font-weight: bold !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 16px;
+  background: var(--win95-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--win95-gray);
+  border: 3px solid var(--win95-gray);
+  border-color: var(--win95-highlight) var(--win95-dark-border) var(--win95-dark-border) var(--win95-highlight);
+}
+
+/* Classic Progress Bar Effect */
+.win95-progress-bar {
+  border: 2px inset var(--win95-gray);
+  height: 20px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--win95-blue),
+    var(--win95-blue) 10px,
+    #0000FF 10px,
+    #0000FF 20px
+  );
+}
+
+/* Win95 specific wheel styling */
+.win95-wheel-container svg {
+  filter: drop-shadow(2px 2px 0px var(--win95-dark-border));
+}
+
+.win95-wheel-container svg circle {
+  stroke: var(--win95-dark-border);
+  stroke-width: 2px;
+}
+
+.win95-wheel-container svg path {
+  stroke: var(--win95-dark-border);
 }
 
 @theme inline {
@@ -17,10 +161,4 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
