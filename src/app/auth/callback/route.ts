@@ -1,24 +1,19 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
   
-  console.log('Auth callback received with code:', code ? 'present' : 'missing');
-
   if (code) {
-    try {
-      const cookieStore = cookies();
-      const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
-      const result = await supabase.auth.exchangeCodeForSession(code);
-      console.log('Code exchange result:', result);
-    } catch (error) {
-      console.error('Error exchanging code for session:', error);
-    }
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    
+    // Exchange the code for a session
+    await supabase.auth.exchangeCodeForSession(code);
   }
-
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(new URL('/', requestUrl.origin));
+  
+  // Redirect to the home page after authentication
+  return NextResponse.redirect(new URL('/', request.url));
 } 

@@ -23,7 +23,13 @@ export async function middleware(req: NextRequest) {
     return res;
   }
   
-  return NextResponse.next();
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req, res });
+  
+  // Refresh session if expired
+  await supabase.auth.getSession();
+  
+  return res;
 }
 
 export const config = {
