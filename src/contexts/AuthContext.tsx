@@ -109,14 +109,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('Starting Google OAuth...');
       
       // Get the current origin dynamically
-      const redirectUrl = typeof window !== 'undefined' 
-        ? `${window.location.origin}/auth/callback`
-        : process.env.NEXT_PUBLIC_SITE_URL + '/auth/callback';
+      const origin = typeof window !== 'undefined' 
+        ? window.location.origin
+        : process.env.NEXT_PUBLIC_SITE_URL;
+      
+      const redirectUrl = `${origin}/auth/callback`;
+      console.log('Using redirect URL:', redirectUrl);
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: redirectUrl,
+          queryParams: {
+            // Force re-consent to ensure we get a fresh token
+            prompt: 'consent',
+            // Include the redirect URL in the state to help with debugging
+            state: JSON.stringify({ redirectUrl })
+          }
         },
       });
       
