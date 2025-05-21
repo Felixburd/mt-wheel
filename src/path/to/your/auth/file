@@ -6,7 +6,10 @@ const authParams = {
   response_type: 'code'
 };
 
-sessionStorage.setItem('oauth_state', authParams.state);
+// When setting the state, also set a cookie as a backup
+const state = generateRandomState();
+document.cookie = `oauth_state=${state}; path=/; secure; max-age=3600`;
+sessionStorage.setItem('oauth_state', state);
 
 const authUrl = `https://accounts.google.com/o/oauth2/auth?${new URLSearchParams(authParams)}`;
 window.location.replace(authUrl);
@@ -22,4 +25,12 @@ const generateRandomState = () => {
   }
   
   return result;
-}; 
+};
+
+// Then in your callback
+const getCookieValue = (name) => {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+};
+
+const storedState = sessionStorage.getItem('oauth_state') || getCookieValue('oauth_state'); 

@@ -4,6 +4,19 @@ console.log('Search params:', window.location.search);
 console.log('Hash:', window.location.hash);
 console.log('Stored state:', sessionStorage.getItem('oauth_state'));
 
+// Add CORS debugging
+console.log('Checking for CORS issues...');
+fetch('https://mt-wheel.onrender.com/api/health-check', {
+  method: 'GET',
+  credentials: 'include'
+})
+.then(response => {
+  console.log('CORS check response:', response.status);
+})
+.catch(error => {
+  console.error('CORS check failed:', error);
+});
+
 // Get parameters from both search and hash
 const getParams = () => {
   const searchParams = new URLSearchParams(window.location.search);
@@ -14,28 +27,51 @@ const getParams = () => {
   return { state };
 };
 
-const { state } = getParams();
-const storedState = sessionStorage.getItem('oauth_state');
-
-if (!state || state !== storedState) {
-  console.error('OAuth state mismatch', { 
-    state, 
-    storedState,
-    fullUrl: window.location.href,
-    searchParams: window.location.search,
-    hash: window.location.hash
-  });
+const handleAuthCallback = () => {
+  // Check if there's an error in the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const error = urlParams.get('error');
+  const errorCode = urlParams.get('error_code');
   
-  // Provide user feedback
-  // Redirect to an error page or show an error message
-  window.location.href = '/auth-error?reason=state_mismatch';
-} else {
-  try {
-    // Continue with authentication flow
-    sessionStorage.removeItem('oauth_state');
-    // Process the token or code
-  } catch (error) {
-    console.error('Error processing authentication:', error);
-    window.location.href = '/auth-error?reason=processing_error';
+  if (error) {
+    console.error('OAuth error from provider:', {
+      error,
+      errorCode,
+      errorDescription: urlParams.get('error_description')
+    });
+    
+    // Redirect to home page with clean URL
+    window.history.replaceState({}, document.title, '/');
+    return;
   }
-} 
+  
+  // Continue with normal flow...
+  const { state } = getParams();
+  const storedState = sessionStorage.getItem('oauth_state');
+
+  if (!state || state !== storedState) {
+    console.error('OAuth state mismatch', { 
+      state, 
+      storedState,
+      fullUrl: window.location.href,
+      searchParams: window.location.search,
+      hash: window.location.hash
+    });
+    
+    // Provide user feedback
+    // Redirect to an error page or show an error message
+    window.location.href = '/auth-error?reason=state_mismatch';
+  } else {
+    try {
+      // Continue with authentication flow
+      sessionStorage.removeItem('oauth_state');
+      // Process the token or code
+    } catch (error) {
+      console.error('Error processing authentication:', error);
+      window.location.href = '/auth-error?reason=processing_error';
+    }
+  }
+};
+
+// Call the handler
+handleAuthCallback(); 
