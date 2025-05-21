@@ -1,13 +1,26 @@
-const urlParams = new URLSearchParams(window.location.search);
-const state = urlParams.get('state');
+// Add this at the beginning of your callback handler
+console.log('Full URL:', window.location.href);
+console.log('Search params:', window.location.search);
+console.log('Hash:', window.location.hash);
+console.log('Stored state:', localStorage.getItem('oauth_state'));
+
+// Get parameters from both search and hash
+const getParams = () => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+  
+  // Check both locations for the state parameter
+  const state = searchParams.get('state') || hashParams.get('state');
+  return { state };
+};
+
+const { state } = getParams();
 const storedState = localStorage.getItem('oauth_state');
 
-if (state !== storedState) {
-  // Handle state mismatch error
-  console.error('OAuth state mismatch');
-  // Redirect to error page or retry authentication
+if (!state || state !== storedState) {
+  console.error('OAuth state mismatch', { state, storedState });
+  // Handle error appropriately
 } else {
   // Continue with authentication flow
-  // Clear the stored state
   localStorage.removeItem('oauth_state');
 } 

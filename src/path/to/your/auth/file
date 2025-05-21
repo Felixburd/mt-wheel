@@ -6,4 +6,7 @@ const authParams = {
   response_type: 'code'
 };
 
-localStorage.setItem('oauth_state', authParams.state); 
+sessionStorage.setItem('oauth_state', authParams.state);
+
+const authUrl = `https://accounts.google.com/o/oauth2/auth?${new URLSearchParams(authParams)}`;
+window.location.replace(authUrl); 
