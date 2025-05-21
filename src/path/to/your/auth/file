@@ -1,0 +1,9 @@
+const authParams = {
+  client_id: YOUR_CLIENT_ID,
+  redirect_uri: YOUR_REDIRECT_URI,
+  scope: 'email profile',
+  state: generateRandomState(),
+  response_type: 'code'
+};
+
+localStorage.setItem('oauth_state', authParams.state); 

@@ -1,0 +1,13 @@
+const urlParams = new URLSearchParams(window.location.search);
+const state = urlParams.get('state');
+const storedState = localStorage.getItem('oauth_state');
+
+if (state !== storedState) {
+  // Handle state mismatch error
+  console.error('OAuth state mismatch');
+  // Redirect to error page or retry authentication
+} else {
+  // Continue with authentication flow
+  // Clear the stored state
+  localStorage.removeItem('oauth_state');
+} 

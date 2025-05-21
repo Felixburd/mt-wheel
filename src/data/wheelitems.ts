@@ -21,7 +21,7 @@ export const wheelItems: WheelItem[] = [
     type: 'product',
     name: 'MT 001Y Shirt',
     imageUrl: 'https://cdn.prod.website-files.com/67f589d434b0a8c58ea74666/67f58af0112897e4460caa66_SS24-Tee2.png',
-    backgroundColor: '#C0C0C0'
+    backgroundColor: '#fad475'
   },
   
   // Discounts (increasing rarity)
@@ -31,7 +31,7 @@ export const wheelItems: WheelItem[] = [
     type: 'discount',
     name: '10%',
     discountPercent: 10,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#C0C0C0'
   },
   {
     id: 4,
@@ -45,7 +45,7 @@ export const wheelItems: WheelItem[] = [
     type: 'discount',
     name: '10%',
     discountPercent: 10,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#C0C0C0'
   },
   {
     id: 6,
@@ -59,7 +59,7 @@ export const wheelItems: WheelItem[] = [
     type: 'discount',
     name: '10%',
     discountPercent: 10,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#C0C0C0'
   },
   
   // 20% Off (4 slices)
@@ -75,7 +75,7 @@ export const wheelItems: WheelItem[] = [
     type: 'discount',
     name: '20%',
     discountPercent: 20,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#C0C0C0'
   },
   {
     id: 10,
@@ -89,7 +89,7 @@ export const wheelItems: WheelItem[] = [
     type: 'discount',
     name: '20%',
     discountPercent: 20,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#C0C0C0'
   },
   
   // 30% Off (3 slices)
@@ -105,7 +105,7 @@ export const wheelItems: WheelItem[] = [
     type: 'discount',
     name: '30%',
     discountPercent: 30,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#C0C0C0'
   },
   {
     id: 14,
@@ -121,14 +121,14 @@ export const wheelItems: WheelItem[] = [
     type: 'discount',
     name: '40%',
     discountPercent: 40,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#d3e4e6'
   },
   {
     id: 16,
     type: 'discount',
-    name: '40%',
-    discountPercent: 40,
-    backgroundColor: '#C0C0C0'
+    name: '41%',
+    discountPercent: 41,
+    backgroundColor: '#94d1ff'
   },
   
   // 50% Off (1 slice)
@@ -137,6 +137,6 @@ export const wheelItems: WheelItem[] = [
     type: 'discount',
     name: '50%',
     discountPercent: 50,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#ffcd8f'
   }
 ]; 
