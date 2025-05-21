@@ -2,7 +2,7 @@
 console.log('Full URL:', window.location.href);
 console.log('Search params:', window.location.search);
 console.log('Hash:', window.location.hash);
-console.log('Stored state:', localStorage.getItem('oauth_state'));
+console.log('Stored state:', sessionStorage.getItem('oauth_state'));
 
 // Get parameters from both search and hash
 const getParams = () => {
@@ -15,12 +15,27 @@ const getParams = () => {
 };
 
 const { state } = getParams();
-const storedState = localStorage.getItem('oauth_state');
+const storedState = sessionStorage.getItem('oauth_state');
 
 if (!state || state !== storedState) {
-  console.error('OAuth state mismatch', { state, storedState });
-  // Handle error appropriately
+  console.error('OAuth state mismatch', { 
+    state, 
+    storedState,
+    fullUrl: window.location.href,
+    searchParams: window.location.search,
+    hash: window.location.hash
+  });
+  
+  // Provide user feedback
+  // Redirect to an error page or show an error message
+  window.location.href = '/auth-error?reason=state_mismatch';
 } else {
-  // Continue with authentication flow
-  localStorage.removeItem('oauth_state');
+  try {
+    // Continue with authentication flow
+    sessionStorage.removeItem('oauth_state');
+    // Process the token or code
+  } catch (error) {
+    console.error('Error processing authentication:', error);
+    window.location.href = '/auth-error?reason=processing_error';
+  }
 } 

@@ -9,4 +9,17 @@ const authParams = {
 sessionStorage.setItem('oauth_state', authParams.state);
 
 const authUrl = `https://accounts.google.com/o/oauth2/auth?${new URLSearchParams(authParams)}`;
-window.location.replace(authUrl); 
+window.location.replace(authUrl);
+
+const generateRandomState = () => {
+  // Use URL-safe characters only
+  const urlSafeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  let result = '';
+  const length = 32;
+  
+  for (let i = 0; i < length; i++) {
+    result += urlSafeChars.charAt(Math.floor(Math.random() * urlSafeChars.length));
+  }
+  
+  return result;
+}; 

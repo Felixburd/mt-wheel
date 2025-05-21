@@ -1,1 +1,1 @@
-const REDIRECT_URI = 'https://mt-wheel.onrender.com/auth/callback'; // NOT '/auth/callback#' 
+const REDIRECT_URI = 'https://mt-wheel.onrender.com/callback'; // Try this if Supabase expects /callback 
