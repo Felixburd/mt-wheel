@@ -1,8 +1,24 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import FortuneWheel from '@/components/FortuneWheel';
 
 export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  useEffect(() => {
+    // Check for auth errors in URL
+    const error = searchParams.get('error');
+    if (error) {
+      console.error('Auth error detected:', error);
+      
+      // Clean the URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [searchParams]);
+  
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}

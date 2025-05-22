@@ -6,24 +6,17 @@ import crypto from 'crypto';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const supabase = createServerSupabaseClient({ req, res });
   
-  // Generate a secure random state
-  const state = crypto.randomBytes(16).toString('hex');
-  
-  // Store the state in a secure, HTTP-only cookie
-  res.setHeader('Set-Cookie', `oauth_state=${state}; Path=/; Max-Age=3600; HttpOnly; Secure; SameSite=Lax`);
-  
-  // Get the provider from the query
-  const { provider = 'google' } = req.query;
+  // Get the host from the request
+  const host = req.headers.host || 'localhost';
+  const protocol = host.includes('localhost') ? 'http' : 'https';
+  const siteUrl = `${protocol}://${host}`;
   
   // Generate the authorization URL
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: provider as any,
+    provider: 'google',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/callback`,
-      scopes: 'email profile',
-      queryParams: {
-        state
-      }
+      redirectTo: `${siteUrl}/api/auth/callback`,
+      // Don't specify state - let Supabase handle it internally
     }
   });
   

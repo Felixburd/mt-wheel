@@ -18,17 +18,16 @@ export async function middleware(req: NextRequest) {
   
   // Handle OAuth error parameters in URL
   if (req.nextUrl.searchParams.has('error') && 
-      req.nextUrl.searchParams.get('error_code') === 'bad_oauth_state') {
+      req.nextUrl.searchParams.get('error') === 'OAuth callback with invalid state') {
     
     console.error('OAuth error detected in middleware:', {
       error: req.nextUrl.searchParams.get('error'),
-      errorCode: req.nextUrl.searchParams.get('error_code'),
-      errorDescription: req.nextUrl.searchParams.get('error_description')
+      url: req.nextUrl.toString(),
+      cookies: req.cookies.getAll().map(c => `${c.name}=${c.value.substring(0, 10)}...`)
     });
     
-    // Clean the URL and redirect
-    const url = req.nextUrl.clone();
-    url.search = '';
+    // Clean the URL and redirect to home
+    const url = new URL('/', req.url);
     return NextResponse.redirect(url);
   }
   
