@@ -19,7 +19,9 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    // Rest of the component code
+    <div className="app-container">
+      {/* Your app content goes here */}
+    </div>
   );
 };
 
