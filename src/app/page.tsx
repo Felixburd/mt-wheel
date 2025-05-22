@@ -12,7 +12,7 @@ export default function Home() {
       
       {/* Main Section */}
       <main className="flex-1 flex flex-col items-center justify-center">
-        <FortuneWheel />
+        <FortuneWheel/>
       </main>
       
       {/* Footer */}

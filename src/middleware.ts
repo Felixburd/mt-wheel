@@ -3,35 +3,40 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(req: NextRequest) {
-  // Only apply middleware to specific paths
-  if (req.nextUrl.pathname.startsWith('/Account')) {
-    const res = NextResponse.next();
-    const supabase = createMiddlewareClient({ req, res });
-    
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    // Check if the user is trying to access a protected route
-    if (!session) {
-      const redirectUrl = req.nextUrl.clone();
-      redirectUrl.pathname = '/Login';
-      redirectUrl.searchParams.set(`redirectedFrom`, req.nextUrl.pathname);
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    return res;
-  }
-  
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
   
-  // Refresh session if expired
-  await supabase.auth.getSession();
+  // Refresh session if needed
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  // Log authentication state for debugging
+  console.log('Middleware auth check:', {
+    path: req.nextUrl.pathname,
+    hasSession: !!session,
+    cookies: req.cookies.getAll().map(c => c.name)
+  });
+  
+  // Handle OAuth error parameters in URL
+  if (req.nextUrl.searchParams.has('error') && 
+      req.nextUrl.searchParams.get('error_code') === 'bad_oauth_state') {
+    
+    console.error('OAuth error detected in middleware:', {
+      error: req.nextUrl.searchParams.get('error'),
+      errorCode: req.nextUrl.searchParams.get('error_code'),
+      errorDescription: req.nextUrl.searchParams.get('error_description')
+    });
+    
+    // Clean the URL and redirect
+    const url = req.nextUrl.clone();
+    url.search = '';
+    return NextResponse.redirect(url);
+  }
   
   return res;
 }
 
 export const config = {
-  matcher: ['/account/:path*'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
 }; 
